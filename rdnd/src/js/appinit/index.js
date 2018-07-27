@@ -5,21 +5,23 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import Board from './../component/Board'
-import { observe } from './../component/Game';
+// import { observe } from './../component/Game';
+import nodes from './../utils/nodePositions';
 
 
 const rootEl = document.getElementById('root');
+console.log('nodes from start: ', nodes)
 
-observe(knightPosition =>
-  ReactDOM.render(
-    <Board knightPosition={knightPosition} />,
-    rootEl
-  )
-);
+// observe(() =>
+//   ReactDOM.render(
+//     <Board nodes={nodes}/>,
+//     rootEl
+//   )
+// );
 
-// ReactDOM.render(
-//   <Board knightPosition={[7, 0]} />,
-//   rootEl
-// )
+ReactDOM.render(
+  <Board nodes={nodes} />,
+  rootEl
+)
 
 registerServiceWorker();

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { ItemTypes } from './Constants';
 import { DragSource } from 'react-dnd';
 
 
-const knightSource = {
-  beginDrag(props) {
-    return {};
+const source = {
+  beginDrag(props, monitor, component) {
+    return props.node;
   }
 };
 
@@ -17,25 +16,28 @@ function collect(connect, monitor) {
   }
 }
 
-class Knight extends Component {
+let chessPiece;
+
+class ChessPiece extends Component {
   render() {
-    const { connectDragSource, isDragging } = this.props;
+    const { connectDragSource, isDragging, content } = this.props;
+    chessPiece = this.props.node.name;
     return connectDragSource(
       <div style={{
         fontSize: '75px', lineHeight: '75px', verticalAlign: 'middle', display: 'table-cell',
         opacity: isDragging ? 0.5 : 1,
-        cursor: 'move',
+        cursor: 'pointer',
         fontWeight: '100'
       }}>
-        &#9816;
+        {content}
       </div>
     );
   }
 }
 
-Knight.propTypes = {
+ChessPiece.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired
 };
 
-export default DragSource('knight', knightSource, collect)(Knight);
+export default DragSource('ChessPiece', source, collect)(ChessPiece);

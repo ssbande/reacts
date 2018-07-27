@@ -2,7 +2,7 @@ let knightPosition = [0, 0];
 let observer = null;
 
 function emitChange() {
-  observer(knightPosition);
+  observe(knightPosition);
 }
 
 export function observe(o) {
@@ -20,6 +20,7 @@ export function moveKnight(toX, toY) {
 }
 
 export function canMoveKnight(toX, toY) {
+  console.log('from can move knight')
   const [x, y] = knightPosition;
   const dx = toX - x;
   const dy = toY - y;

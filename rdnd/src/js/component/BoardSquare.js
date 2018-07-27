@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Square from './square';
-import { canMoveKnight, moveKnight } from './Game';
-// import { ItemTypes } from './Constants';
 import { DropTarget } from 'react-dnd';
 
+import pieceMoveRules from './../utils/pieceMoveRules';
+const moveRules = new pieceMoveRules([]);
+
 const squareTarget = {
-  canDrop(props) {
-    return canMoveKnight(props.x, props.y);
+  canDrop(props, monitor) {
+    const item = monitor.getItem();
+    let methodName = 'canMove' + item.piece;
+    return moveRules[methodName](item, props.x, props.y, props.node);
   },
 
-  drop(props) {
-    moveKnight(props.x, props.y);
+  drop(props, monitor) {
+    const item = monitor.getItem();
+    props.updatePositionForNode(item, {x: props.x, y: props.y});
+    return {};
+    // const item = monitor.getItem();
+    // let methodName = 'move' + item.piece;
+    // return moveRules[methodName](item, props.x, props.y, props.updatePositionForNode);
   }
 };
 
-function collect(connect, monitor) {
+function collect(connect, monitor) {  
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
+    canDrop: monitor.canDrop(),
+    itemType: monitor.getItemType(),
+    item: monitor.getItem()
   };
 }
 
@@ -34,13 +44,13 @@ class BoardSquare extends Component {
         width: '100%',
         zIndex: 1,
         opacity: 0.5,
-        backgroundColor: color,
+        backgroundColor: color
       }} />
     );
   }
 
   render() {
-    const { x, y, connectDropTarget, isOver, canDrop } = this.props;
+    const { x, y, connectDropTarget, isOver, canDrop, node, updatePositionForNode} = this.props;
     const black = (x + y) % 2 === 1;
 
     return connectDropTarget(
@@ -52,7 +62,7 @@ class BoardSquare extends Component {
         <Square black={black}>
           {this.props.children}
         </Square>
-        {isOver && !canDrop && this.renderOverlay('red')}
+        {isOver && canDrop && this.renderOverlay('red')}
         {!isOver && canDrop && this.renderOverlay('yellow')}
         {isOver && canDrop && this.renderOverlay('green')}
       </div>
@@ -68,4 +78,4 @@ BoardSquare.propTypes = {
   canDrop: PropTypes.bool.isRequired
 };
 
-export default DropTarget('knight', squareTarget, collect)(BoardSquare);
+export default DropTarget('ChessPiece', squareTarget, collect)(BoardSquare);

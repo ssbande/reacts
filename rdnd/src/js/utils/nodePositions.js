@@ -1,0 +1,57 @@
+const nodes = [
+  { position: [0, 0], orig: [0, 0], content: '♜', name: 'blackRook1', piece: 'Rook'},
+  { position: [1, 0], orig: [1, 0], content: '♞', name: 'blackKnight1', piece: 'Knight'},
+  { position: [2, 0], orig: [2, 0], content: '♝', name: 'blackBishop1', piece: 'Bishop'},
+  { position: [3, 0], orig: [3, 0], content: '♛', name: 'blackQueen', piece: 'Queen'},
+  { position: [4, 0], orig: [4, 0], content: '♚', name: 'blackKing', piece: 'King'},
+  { position: [5, 0], orig: [5, 0], content: '♝', name: 'blackBishop2', piece: 'Bishop'},
+  { position: [6, 0], orig: [6, 0], content: '♞', name: 'blackKnight2', piece: 'Knight'},
+  { position: [7, 0], orig: [7, 0], content: '♜', name: 'blackRook2', piece: 'Rook'},
+  { position: [0, 7], orig: [0, 7], content: '♖', name: 'whiteRook1', piece: 'Rook'},
+  { position: [1, 7], orig: [1, 7], content: '♘', name: 'whiteKnight1', piece: 'Knight'},
+  { position: [2, 7], orig: [2, 7], content: '♗', name: 'whiteBishop1', piece: 'Bishop'},
+  { position: [3, 7], orig: [3, 7], content: '♕', name: 'whiteQueen', piece: 'Queen'},
+  { position: [4, 7], orig: [4, 7], content: '♔', name: 'whiteKing', piece: 'King'},
+  { position: [5, 7], orig: [5, 7], content: '♗', name: 'whiteBishop2', piece: 'Bishop'},
+  { position: [6, 7], orig: [6, 7], content: '♘', name: 'whiteKnight2', piece: 'Knight'},
+  { position: [7, 7], orig: [7, 7], content: '♖', name: 'whiteRook2', piece: 'Rook'},
+
+  // Pawns
+  { position: [0, 1], orig: [0, 1], content: '♟', name: 'blackPawn1', piece: 'Pawn'},
+  { position: [1, 1], orig: [1, 1], content: '♟', name: 'blackPawn2', piece: 'Pawn'},
+  { position: [2, 1], orig: [2, 1], content: '♟', name: 'blackPawn3', piece: 'Pawn'},
+  { position: [3, 1], orig: [3, 1], content: '♟', name: 'blackPawn4', piece: 'Pawn'},
+  { position: [4, 1], orig: [4, 1], content: '♟', name: 'blackPawn5', piece: 'Pawn'},
+  { position: [5, 1], orig: [5, 1], content: '♟', name: 'blackPawn6', piece: 'Pawn'},
+  { position: [6, 1], orig: [6, 1], content: '♟', name: 'blackPawn7', piece: 'Pawn'},
+  { position: [7, 1], orig: [7, 1], content: '♟', name: 'blackPawn8', piece: 'Pawn'},
+  { position: [0, 6], orig: [0, 6], content: '♙', name: 'whitePawn1', piece: 'Pawn'},
+  { position: [1, 6], orig: [1, 6], content: '♙', name: 'whitePawn2', piece: 'Pawn'},
+  { position: [2, 6], orig: [2, 6], content: '♙', name: 'whitePawn3', piece: 'Pawn'},
+  { position: [3, 6], orig: [3, 6], content: '♙', name: 'whitePawn4', piece: 'Pawn'},
+  { position: [4, 6], orig: [4, 6], content: '♙', name: 'whitePawn5', piece: 'Pawn'},
+  { position: [5, 6], orig: [5, 6], content: '♙', name: 'whitePawn6', piece: 'Pawn'},
+  { position: [6, 6], orig: [6, 6], content: '♙', name: 'whitePawn7', piece: 'Pawn'},
+  { position: [7, 6], orig: [7, 6], content: '♙', name: 'whitePawn8', piece: 'Pawn'},
+]
+
+// const nodes = {
+//   blackrook1: { position: [0, 0], content: '&#9820;' },
+//   blackknight1: { position: [0, 1], content: '&#9820;' },
+//   blackbishop1: { position: [0, 2], content: '&#9820;' },
+//   blackqueen: { position: [0, 3], content: '&#9820;' },
+//   blackking: { position: [0, 4], content: '&#9820;' },
+//   blackbishop2: { position: [0, 5], content: '&#9820;' },
+//   blackknight2: { position: [0, 6], content: '&#9820;' },
+//   blackrook2: { position: [0, 7], content: '&#9820;' },
+//   whiterook1: { position: [7, 0], content: '&#9820;' },
+//   whiteknight1: { position: [7, 1], content: '&#9820;' },
+//   whitebishop1: { position: [7, 2], content: '&#9820;' },
+//   whitequeen: { position: [7, 3], content: '&#9820;' },
+//   whiteking: { position: [7, 4], content: '&#9820;' },
+//   whitebishop2: { position: [7, 5], content: '&#9820;' },
+//   whiteknight2: { position: [7, 6], content: '&#9820;' },
+//   whiterook2: { position: [7, 7], content: '&#9820;' }
+// }
+
+export default nodes;
