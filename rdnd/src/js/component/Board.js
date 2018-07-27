@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Square from './square';
 import Knight from './knight';
 import BoardSquare from './BoardSquare';
-// import { canMoveKnight, moveKnight } from './Game';
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -16,18 +15,21 @@ class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      positions: nodes
+      positions: nodes,
+      whiteDeadPawns: [],
+      whiteDeadFigures: [],
+      blackKilledPawns: [],
+      blackDeadFigures: []
     };
 
-    this.updatePositionForNode = this.updatePositionForNode.bind(this)
+    this.updatePositionForNode = this.updatePositionForNode.bind(this);
   }
 
   updatePositionForNode(node, newPosition) {
-    console.log('came here: ', node, newPosition)
     let oldNodes = this.state.positions;
     const toX = newPosition.x, toY = newPosition.y
     oldNodes.forEach(element => {
-      if(element.name === node.name) {
+      if (element.name === node.name) {
         element.position = [toX, toY]
       }
     });
@@ -55,7 +57,7 @@ class Board extends Component {
     // }
 
     console.log('positions: ', x, ' ', y, ' node: ', n);
-    
+
 
     return (
       <div key={i} style={{ width: '12.5%', height: '12.5%' }}>  {/* onClick={() => this.handleSquareClick(x, y)} */}
@@ -79,7 +81,7 @@ class Board extends Component {
     //   return node.position[0] === x && node.position[1] === y;
     // });
     if (n) {
-      return <ChessPiece content={n.content} node={n}/>;
+      return <ChessPiece content={n.content} node={n} />;
     }
   }
 
@@ -90,22 +92,78 @@ class Board extends Component {
   //   }
   // }
 
+  renderWhiteDeadPawns(i) {
+    const x = i % 8;
+    const y = Math.floor(i / 8);
+    let content = ''
+    if(!_.isEmpty(this.state.whiteDeadPawns[i])) {
+      content = this.state.whiteDeadPawns[i].content;
+    }
+
+    return (
+      <div style={{
+        fontSize: '75px', lineHeight: '75px', verticalAlign: 'middle', display: 'table-cell',
+        fontWeight: '100', border: '1px solid whitesmoke',width:'100%'
+      }}>
+        {content}
+      </div>
+    );
+  }
+
+  renderWhiteDeadFigures(i) {
+    const x = i % 8;
+    const y = Math.floor(i / 8);
+    let content = ''
+    if(!_.isEmpty(this.state.whiteDeadFigures[i])) {
+      content = this.state.whiteDeadFigures[i].content;
+    }
+
+    return (
+      <div style={{
+        fontSize: '75px', lineHeight: '75px', verticalAlign: 'middle', display: 'table-cell',
+        fontWeight: '100', border: '1px solid whitesmoke',width:'100%'
+      }}>
+        {content}
+      </div>
+    );
+  }
+
   render() {
     const squares = [];
     for (let i = 0; i < 64; i++) {
       squares.push(this.renderSquare(i));
     }
 
+    const whiteDeadPawnSquares = []; 
+    for (let i = 0; i < 8; i++) {
+      whiteDeadPawnSquares.push(this.renderWhiteDeadPawns(i))
+    }  
+
+    const whiteDeadFiguresSquares = []; 
+    for (let i = 0; i < 8; i++) {
+      whiteDeadFiguresSquares.push(this.renderWhiteDeadFigures(i))
+    }  
+    
+
     return (
-      <div style={{
-        width: '800px',
-        height: '800px',
-        display: 'flex',
-        flexWrap: 'wrap',
-        margin: '50px auto',
-        border: '1px solid #999',
-      }}>
-        {squares}
+      <div style={{display: 'flex'}}>
+        <div style={{display: 'inline-flex', marginRight: 8, height: '800px', border: '1px solid #999', width: '200px'}}>Shreyas</div>
+        <div style={{
+          width: '800px',
+          height: '800px',
+          display: 'inline-flex',
+          margin: '0px auto',
+          flexWrap: 'wrap',
+          border: '1px solid #999',
+        }}>
+          {squares}
+        </div>
+        <div style={{display: 'inline-flex', marginLeft: 8, height: 800, border: '1px solid #999', width: 200}}>
+          <div style={{display:'flex'}}>
+          <div style={{width: '50%', display: 'flex', flexWrap: 'wrap', width: '100px'}}>{whiteDeadPawnSquares}</div>
+          <div style={{width: '50%', display: 'flex', flexWrap: 'wrap', width: '100px'}}>{whiteDeadFiguresSquares}</div>
+          </div>
+        </div>
       </div>
     );
   }
