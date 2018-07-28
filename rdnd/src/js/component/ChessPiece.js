@@ -20,11 +20,12 @@ let chessPiece;
 
 class ChessPiece extends Component {
   render() {
-    const { connectDragSource, isDragging, content } = this.props;
+    const { connectDragSource, isDragging, content, sq } = this.props;
     chessPiece = this.props.node.name;
+    const fs= 0.75*sq;
     return connectDragSource(
       <div style={{
-        fontSize: '75px', lineHeight: '75px', verticalAlign: 'middle', display: 'table-cell',
+        fontSize: fs, lineHeight: fs+'px', verticalAlign: 'middle', display: 'table-cell',
         opacity: isDragging ? 0.5 : 1,
         cursor: 'pointer',
         fontWeight: '100'
