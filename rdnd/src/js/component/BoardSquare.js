@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Square from './square';
 import { DropTarget } from 'react-dnd';
+import {OverlaySquare} from './style';
 
 import pieceMoveRules from './../utils/pieceMoveRules';
 const moveRules = new pieceMoveRules([]);
@@ -15,11 +16,8 @@ const squareTarget = {
 
   drop(props, monitor) {
     const item = monitor.getItem();
-    props.updatePositionForNode(item, {x: props.x, y: props.y});
+    props.updatePositionForNode(item, {x: props.x, y: props.y}, props.node);
     return {};
-    // const item = monitor.getItem();
-    // let methodName = 'move' + item.piece;
-    // return moveRules[methodName](item, props.x, props.y, props.updatePositionForNode);
   }
 };
 
@@ -35,18 +33,7 @@ function collect(connect, monitor) {
 
 class BoardSquare extends Component {
   renderOverlay(color) {
-    return (
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%',
-        zIndex: 1,
-        opacity: 0.5,
-        backgroundColor: color
-      }} />
-    );
+    return <OverlaySquare color={color} />;
   }
 
   render() {
@@ -54,17 +41,13 @@ class BoardSquare extends Component {
     const black = (x + y) % 2 === 1;
 
     return connectDropTarget(
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%'
-      }}>
+      <div style={{position: 'relative', width: '100%', height: '100%'}}>
         <Square black={black}>
           {this.props.children}
         </Square>
-        {isOver && canDrop && this.renderOverlay('red')}
-        {!isOver && canDrop && this.renderOverlay('yellow')}
-        {isOver && canDrop && this.renderOverlay('green')}
+        {isOver && canDrop && <OverlaySquare color='red' />}
+        {!isOver && canDrop && <OverlaySquare color='yellow' />}
+        {isOver && canDrop && <OverlaySquare color='green' />}
       </div>
     );
   }

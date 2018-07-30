@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {StyledSquare} from './style'
 
 export default class Square extends Component {
   render() {
     const { black } = this.props;
-    const fill = black ? 'silver' : 'white';
+    const fill = black ? '#aed9da' : '#edfafd';
+    // const pieceColor = '#135589'
 
     return (
-      <div style={{
-        backgroundColor: fill,
-        width: '100%',
-        height: '100%',
-        textAlign: 'center',
-        display: 'table'
-      }}>
+      <StyledSquare fill={fill}>
         {this.props.children}
-      </div>
+      </StyledSquare>
     );
   }
 }

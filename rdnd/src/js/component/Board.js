@@ -9,6 +9,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import _ from 'underscore';
 import ChessPiece from './ChessPiece'
 import nodes from './../utils/nodePositions';
+import Constants from './../utils/constants';
+import { DeadBox, Header, DeadBoxContainer, BoardContainer, DeadBoxColumn, DeadBoxColumnContainer, BoardPieceSquare } from './style';
 
 
 class Board extends Component {
@@ -18,25 +20,30 @@ class Board extends Component {
       positions: nodes,
       whiteDeadPawns: [],
       whiteDeadFigures: [],
-      blackKilledPawns: [],
+      blackDeadPawns: [],
       blackDeadFigures: []
     };
 
-    this.deadBoxStyle = {
-      fontSize: '75px',
-      lineHeight: '75px',
-      verticalAlign: 'middle',
-      display: 'table-cell',
-      fontWeight: '100',
-      border: '1px solid whitesmoke',
-      width: '100%'
-    }
     this.updatePositionForNode = this.updatePositionForNode.bind(this);
   }
 
-  updatePositionForNode(node, newPosition) {
+  updatePositionForNode(node, newPosition, targetNode) {
     let oldNodes = this.state.positions;
     const toX = newPosition.x, toY = newPosition.y
+    const wdP = this.state.whiteDeadPawns, wdF = this.state.whiteDeadFigures;
+    const bdP = this.state.blackDeadPawns, bdF = this.state.blackDeadFigures;
+
+    if (!_.isEmpty(targetNode)) {
+      const isBlack = targetNode.name.indexOf('black') !== -1;
+      if (targetNode.piece == 'Pawn') {
+        if (isBlack) { bdP.push(targetNode) } else { wdP.push(targetNode) };
+      } else {
+        if (isBlack) { bdF.push(targetNode) } else { wdF.push(targetNode) };
+      }
+
+      oldNodes = _.without(oldNodes, _.findWhere(oldNodes, { name: targetNode.name }));
+    }
+
     oldNodes.forEach(element => {
       if (element.name === node.name) {
         element.position = [toX, toY]
@@ -44,7 +51,11 @@ class Board extends Component {
     });
 
     this.setState({
-      positions: oldNodes
+      whiteDeadFigures: wdF,
+      whiteDeadPawns: wdP,
+      positions: oldNodes,
+      blackDeadPawns: bdP,
+      blackDeadFigures: bdF
     })
   }
 
@@ -57,7 +68,7 @@ class Board extends Component {
     });
 
     return (
-      <div key={i} style={{ width: '12.5%', height: '12.5%' }}>  {/* onClick={() => this.handleSquareClick(x, y)} */}
+      <div key={i} style={{ width: '12.5%', height: '12.5%' }}>
         <BoardSquare x={x} y={y} node={n} updatePositionForNode={this.updatePositionForNode}>
           {this.renderPiece(x, y, n, sqW)}
         </BoardSquare>
@@ -67,99 +78,59 @@ class Board extends Component {
 
   renderPiece(x, y, n, sqW) {
     if (n) {
-      return <ChessPiece content={n.content} node={n} sq={sqW}/>;
+      return <ChessPiece content={n.content} node={n} sq={sqW} />;
     }
   }
 
-  renderWhiteDeadPawns(i) {
-    const x = i % 8;
-    const y = Math.floor(i / 8);
-    let content = _.isEmpty(this.state.whiteDeadPawns[i]) ? '' : this.state.whiteDeadPawns[i].content;
+  renderDeadPiece(i, color, category) {
+    let targetArray = [];
+    if (color === Constants.color.white) {
+      targetArray = category === Constants.category.pawn ? this.state.whiteDeadPawns : category === Constants.category.figure ? this.state.whiteDeadFigures : targetArray;
+    } else if (color === Constants.color.black) {
+      targetArray = category === Constants.category.pawn ? this.state.blackDeadPawns : category === Constants.category.figure ? this.state.blackDeadFigures : targetArray;
+    }
 
+    let content = _.isEmpty(targetArray[i]) ? '' : targetArray[i].content;
     return (
-      <div style={this.deadBoxStyle}>{content}</div>
-    );
-  }
-
-  renderWhiteDeadFigures(i) {
-    const x = i % 8;
-    const y = Math.floor(i / 8);
-    let content = _.isEmpty(this.state.whiteDeadFigures[i]) ? '' : this.state.whiteDeadFigures[i].content;
-
-    return (
-      <div style={this.deadBoxStyle}>{content}</div>
+      <DeadBoxContainer sw={this.props.sq}>
+        <DeadBox sw={this.props.sq}>{content}</DeadBox>
+      </DeadBoxContainer>
     );
   }
 
   render() {
     const squares = [];
     const boardWidth = this.props.sq * 8;
+    const whiteDeadPawnSquares = [], whiteDeadFiguresSquares = [], blackDeadPawnSquares = [], blackDeadFiguresSquares = [];
     for (let i = 0; i < 64; i++) {
+      if(i < 8) {
+        whiteDeadPawnSquares.push(this.renderDeadPiece(i, Constants.color.white, Constants.category.pawn));
+        whiteDeadFiguresSquares.push(this.renderDeadPiece(i, Constants.color.white, Constants.category.figure));
+        blackDeadPawnSquares.push(this.renderDeadPiece(i, Constants.color.black, Constants.category.pawn));
+        blackDeadFiguresSquares.push(this.renderDeadPiece(i, Constants.color.black, Constants.category.figure))
+      }
+
       squares.push(this.renderSquare(i, this.props.sq));
     }
 
-    const whiteDeadPawnSquares = [];
-    for (let i = 0; i < 8; i++) {
-      whiteDeadPawnSquares.push(this.renderWhiteDeadPawns(i))
-    }
-
-    const whiteDeadFiguresSquares = [];
-    for (let i = 0; i < 8; i++) {
-      whiteDeadFiguresSquares.push(this.renderWhiteDeadFigures(i))
-    }
-
     return (
-      // <div className='container-fluid'>
-      //   <div className="row">
-      //     <div className="col">
-      //       <div style={{ display: 'inline-flex', marginLeft: 8, height: boardWidth, border: '1px solid #999', width: this.props.sq * 2 }}>
-      //         <div style={{ display: 'flex' }}>
-      //           <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadPawnSquares}</div>
-      //           <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadFiguresSquares}</div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //     <div className="col">
-      //       <div style={{ width: boardWidth, height: boardWidth, display: 'inline-flex', margin: '0px auto', flexWrap: 'wrap', border: '1px solid #999' }}>
-      //         {squares}
-      //       </div>
-      //     </div>
-      //     <div className="col">
-      //       <div style={{ display: 'inline-flex', marginLeft: 8, height: boardWidth, border: '1px solid #999', width: this.props.sq * 2 }}>
-      //         <div style={{ display: 'flex' }}>
-      //           <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadPawnSquares}</div>
-      //           <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadFiguresSquares}</div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //     <div className="col">
-      //       One of three columns
-      //     </div>
-      //   </div>
-      // </div>
-      <div style={{ display: 'flex'}}>
-        <div style={{ display: 'inline-flex', marginRight: 8, height: boardWidth, border: '1px solid #999', width: this.props.sq * 2 }}>
-          <div style={{ display: 'flex' }}>
-            <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadPawnSquares}</div>
-            <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadFiguresSquares}</div>
-          </div>
-        </div>
-        <div style={{
-          width: boardWidth,
-          height: boardWidth,
-          display: 'inline-flex',
-          margin: '0px',
-          flexWrap: 'wrap',
-          border: '1px solid #999',
-        }}>
-          {squares}
-        </div>
-        <div style={{ display: 'inline-flex', marginLeft: 8, height: boardWidth, border: '1px solid #999', width: this.props.sq * 2 }}>
-          <div style={{ display: 'flex' }}>
-            <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadPawnSquares}</div>
-            <div style={{ width: '50%', display: 'flex', flexWrap: 'wrap', width: this.props.sq }}>{whiteDeadFiguresSquares}</div>
-          </div>
-        </div>
+      <div>
+        <Header>Chess</Header>
+        <BoardContainer>
+          <DeadBoxColumnContainer sw={this.props.sq} boardWidth={boardWidth}>
+            <div style={{ display: 'flex' }}>
+              <DeadBoxColumn sw={this.props.sq}>{blackDeadPawnSquares}</DeadBoxColumn>
+              <DeadBoxColumn sw={this.props.sq}>{blackDeadFiguresSquares}</DeadBoxColumn>
+            </div>
+          </DeadBoxColumnContainer>
+          <BoardPieceSquare sw={this.props.sq} boardWidth={boardWidth}>{squares}</BoardPieceSquare>
+          <DeadBoxColumnContainer sw={this.props.sq}>
+            <div style={{ display: 'flex' }}>
+              <DeadBoxColumn sw={this.props.sq}>{whiteDeadPawnSquares}</DeadBoxColumn>
+              <DeadBoxColumn sw={this.props.sq}>{whiteDeadFiguresSquares}</DeadBoxColumn>
+            </div>
+          </DeadBoxColumnContainer>
+        </BoardContainer>
       </div>
     );
   }
