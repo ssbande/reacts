@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Square from './square';
-import Knight from './knight';
 import BoardSquare from './BoardSquare';
 
 import { DragDropContext } from 'react-dnd';
@@ -69,7 +68,7 @@ class Board extends Component {
 
     return (
       <div key={i} style={{ width: '12.5%', height: '12.5%' }}>
-        <BoardSquare x={x} y={y} node={n} updatePositionForNode={this.updatePositionForNode}>
+        <BoardSquare x={x} y={y} node={n} currentBoardPosition={this.state.positions} updatePositionForNode={this.updatePositionForNode}>
           {this.renderPiece(x, y, n, sqW)}
         </BoardSquare>
       </div>

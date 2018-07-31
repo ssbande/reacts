@@ -11,7 +11,7 @@ const squareTarget = {
   canDrop(props, monitor) {
     const item = monitor.getItem();
     let methodName = 'canMove' + item.piece;
-    return moveRules[methodName](item, props.x, props.y, props.node);
+    return moveRules[methodName](item, props.x, props.y, props.node, props.currentBoardPosition);
   },
 
   drop(props, monitor) {
@@ -45,7 +45,7 @@ class BoardSquare extends Component {
         <Square black={black}>
           {this.props.children}
         </Square>
-        {isOver && canDrop && <OverlaySquare color='red' />}
+        {isOver && !canDrop && <OverlaySquare color='red' />}
         {!isOver && canDrop && <OverlaySquare color='yellow' />}
         {isOver && canDrop && <OverlaySquare color='green' />}
       </div>
