@@ -11,7 +11,7 @@ const squareTarget = {
   canDrop(props, monitor) {
     const item = monitor.getItem();
     let methodName = 'canMove' + item.piece;
-    return moveRules[methodName](item, props.x, props.y, props.node, props.currentBoardPosition);
+    return moveRules[methodName](item, props.x, props.y, props.node, props.currentBoardPosition, props.currentChance);
   },
 
   drop(props, monitor) {

@@ -9,7 +9,7 @@ import _ from 'underscore';
 import ChessPiece from './ChessPiece'
 import nodes from './../utils/nodePositions';
 import Constants from './../utils/constants';
-import { DeadBox, Header, DeadBoxContainer, BoardContainer, DeadBoxColumn, DeadBoxColumnContainer, BoardPieceSquare } from './style';
+import { DeadBox, Header, DeadBoxContainer, BoardContainer, DeadBoxColumn, DeadBoxColumnContainer, BoardPieceSquare, DeadBoxColumnHeading } from './style';
 
 
 class Board extends Component {
@@ -20,7 +20,8 @@ class Board extends Component {
       whiteDeadPawns: [],
       whiteDeadFigures: [],
       blackDeadPawns: [],
-      blackDeadFigures: []
+      blackDeadFigures: [],
+      chance: 'W'
     };
 
     this.updatePositionForNode = this.updatePositionForNode.bind(this);
@@ -28,6 +29,7 @@ class Board extends Component {
 
   updatePositionForNode(node, newPosition, targetNode) {
     let oldNodes = this.state.positions;
+    let playerChance = this.state.chance;
     const toX = newPosition.x, toY = newPosition.y
     const wdP = this.state.whiteDeadPawns, wdF = this.state.whiteDeadFigures;
     const bdP = this.state.blackDeadPawns, bdF = this.state.blackDeadFigures;
@@ -54,7 +56,8 @@ class Board extends Component {
       whiteDeadPawns: wdP,
       positions: oldNodes,
       blackDeadPawns: bdP,
-      blackDeadFigures: bdF
+      blackDeadFigures: bdF,
+      chance: playerChance == 'W' ? 'B' : 'W'
     })
   }
 
@@ -68,7 +71,7 @@ class Board extends Component {
 
     return (
       <div key={i} style={{ width: '12.5%', height: '12.5%' }}>
-        <BoardSquare x={x} y={y} node={n} currentBoardPosition={this.state.positions} updatePositionForNode={this.updatePositionForNode}>
+        <BoardSquare x={x} y={y} node={n} currentChance={this.state.chance} currentBoardPosition={this.state.positions} updatePositionForNode={this.updatePositionForNode}>
           {this.renderPiece(x, y, n, sqW)}
         </BoardSquare>
       </div>
@@ -98,6 +101,8 @@ class Board extends Component {
   }
 
   render() {
+    console.log(' Chance: ', this.state.chance);
+    
     const squares = [];
     const boardWidth = this.props.sq * 8;
     const whiteDeadPawnSquares = [], whiteDeadFiguresSquares = [], blackDeadPawnSquares = [], blackDeadFiguresSquares = [];
@@ -114,9 +119,15 @@ class Board extends Component {
 
     return (
       <div>
-        <Header>Chess</Header>
+        <Header>CHESS</Header>
         <BoardContainer>
-          <DeadBoxColumnContainer sw={this.props.sq} boardWidth={boardWidth}>
+          <DeadBoxColumnHeading sw={this.props.sq}></DeadBoxColumnHeading>
+          <DeadBoxColumnHeading sw={boardWidth/2} margin={8}><span>Player 2</span></DeadBoxColumnHeading>
+          <DeadBoxColumnHeading sw={this.props.sq}></DeadBoxColumnHeading>
+        </BoardContainer>
+        <br />
+        <BoardContainer>
+          <DeadBoxColumnContainer sw={this.props.sq} height={boardWidth}>
             <div style={{ display: 'flex' }}>
               <DeadBoxColumn sw={this.props.sq}>{blackDeadPawnSquares}</DeadBoxColumn>
               <DeadBoxColumn sw={this.props.sq}>{blackDeadFiguresSquares}</DeadBoxColumn>
@@ -129,6 +140,12 @@ class Board extends Component {
               <DeadBoxColumn sw={this.props.sq}>{whiteDeadFiguresSquares}</DeadBoxColumn>
             </div>
           </DeadBoxColumnContainer>
+        </BoardContainer>
+        <br />
+        <BoardContainer>
+          <DeadBoxColumnHeading sw={this.props.sq}></DeadBoxColumnHeading>
+          <DeadBoxColumnHeading sw={boardWidth/2} margin={8}><span>Player 1</span></DeadBoxColumnHeading>
+          <DeadBoxColumnHeading sw={this.props.sq}></DeadBoxColumnHeading>
         </BoardContainer>
       </div>
     );
