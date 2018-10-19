@@ -89,3 +89,9 @@
         title: 'Basic',
         template: './src/config/template.html'
     }) >> Add in plugins.
+
+##### Router Setup
+
+21. npm install --save react-router-dom
+...
+28. npm install css-loader style-loader --save-dev

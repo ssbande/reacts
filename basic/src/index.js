@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-const title = 'Getting started with react';
+import App from './components/App';
 
 ReactDOM.render(
-  <div>{title}</div>, document.getElementById('app')
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('app')
 );

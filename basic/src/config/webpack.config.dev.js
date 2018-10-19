@@ -22,7 +22,8 @@ module.exports = {
 		contentBase: './dist',
 		port: 9595,
 		open: true,
-		hot: true
+		hot: true,
+		historyApiFallback: true
 	},
 	module: {
     rules: [
@@ -35,6 +36,11 @@ module.exports = {
 				test: /\.js$/,
 				exclude: /node_modules/,
 				use: ['babel-loader', 'eslint-loader']
+			},
+			{
+				test: /\.css$/,
+				exclude: /node_modules/,
+				use: ['style-loader', 'css-loader']
 			}
     ]
   }

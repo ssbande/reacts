@@ -1,0 +1,33 @@
+.categoryContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.categoryMenu {
+    width: 100%;
+}
+
+.categoryMenu ul {
+    list-style-type: none;
+    padding: 10;
+    margin-right: 1px;
+}
+
+.categoryMenu li {
+    width: 100%;
+}
+
+.categoryMenu li a {
+    display: block;
+    color: dodgerblue;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.categoryMenu li a:hover {
+    background-color:dodgerblue;
+    color: white;
+}
