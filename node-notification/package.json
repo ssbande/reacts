@@ -15,6 +15,6 @@
   "author": "Shreyas Bande",
   "license": "ISC",
   "dependencies": {
-    "node-notifier": "^5.2.1"
+    "node-notifier": "^8.0.1"
   }
 }
