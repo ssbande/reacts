@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "jest": "20.0.4",
     "jss": "^9.8.7",
     "object-assign": "4.1.1",
